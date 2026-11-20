@@ -131,7 +131,12 @@ private struct CourtPanel: View {
         ZStack {
             CourtFigure(rank: card.rank, suit: card.suit, art: art, style: style)
                 .clipShape(panel)
-            panel.strokeBorder(Color(hex: 0x1A1A1A), lineWidth: max(0.75, w * 0.011))
+            if style == .glass {
+                panel.strokeBorder(LinearGradient(colors: style.accent, startPoint: .top, endPoint: .bottom),
+                                   lineWidth: max(0.75, w * 0.014))
+            } else {
+                panel.strokeBorder(Color(hex: 0x1A1A1A), lineWidth: max(0.75, w * 0.011))
+            }
         }
         .frame(width: frame.width, height: frame.height)
         .position(x: frame.midX, y: frame.midY)

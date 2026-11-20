@@ -97,27 +97,69 @@ struct CourtFigure: View {
     // MARK: Palette
 
     private struct Palette {
-        let red = GraphicsContext.Shading.color(Color(hex: 0xC8102E))
-        let yellow = GraphicsContext.Shading.color(Color(hex: 0xF2C230))
-        let blue = GraphicsContext.Shading.color(Color(hex: 0x2756A8))
-        let ink = GraphicsContext.Shading.color(Color(hex: 0x111111))
-        let white = GraphicsContext.Shading.color(.white)
-        let skin = GraphicsContext.Shading.color(Color(hex: 0xF7DCC4))
-        let hair = GraphicsContext.Shading.color(Color(hex: 0xF2C230))
-        let steel = GraphicsContext.Shading.linearGradient(
-            Gradient(colors: [Color(hex: 0xEEF1F5), Color(hex: 0x9AA3AE)]),
-            startPoint: CGPoint(x: 76, y: 0), endPoint: CGPoint(x: 84, y: 0))
-        let outline = GraphicsContext.Shading.color(Color(hex: 0x111111))
-        let lineWidth: CGFloat = 0.7
+        var paper: [Color]
+        var red: GraphicsContext.Shading
+        var yellow: GraphicsContext.Shading
+        var blue: GraphicsContext.Shading
+        var ink: GraphicsContext.Shading
+        var white: GraphicsContext.Shading
+        var skin: GraphicsContext.Shading
+        var hair: GraphicsContext.Shading
+        var steel: GraphicsContext.Shading
+        var outline: GraphicsContext.Shading
+        var lineWidth: CGFloat = 0.7
+        var sheen: Double
+
+        init(style: CardStyle) {
+            func c(_ hex: UInt32) -> GraphicsContext.Shading { .color(Color(hex: hex)) }
+            switch style {
+            case .classic:
+                paper = [.white, .white]
+                red = c(0xC8102E); yellow = c(0xF2C230); blue = c(0x2756A8); ink = c(0x111111)
+                white = c(0xFFFFFF); skin = c(0xF7DCC4); hair = c(0xF2C230)
+                steel = .linearGradient(Gradient(colors: [Color(hex: 0xEEF1F5), Color(hex: 0x9AA3AE)]),
+                                        startPoint: CGPoint(x: 76, y: 0), endPoint: CGPoint(x: 84, y: 0))
+                outline = c(0x111111)
+                sheen = 0
+            case .glass:
+                // Matches the Glass deck: raspberry and sky blue with pale gold, navy line work.
+                paper = [Color(hex: 0xFFFFFF), Color(hex: 0xE6EEFA)]
+                red = .linearGradient(Gradient(colors: [Color(hex: 0xF0577D), Color(hex: 0xC92A55)]),
+                                      startPoint: CGPoint(x: 50, y: 40), endPoint: CGPoint(x: 50, y: 86))
+                yellow = .linearGradient(Gradient(colors: [Color(hex: 0xFFE7A3), Color(hex: 0xF1BE52)]),
+                                         startPoint: CGPoint(x: 50, y: 0), endPoint: CGPoint(x: 50, y: 86))
+                blue = .linearGradient(Gradient(colors: [Color(hex: 0x7FB4FF), Color(hex: 0x4767E0)]),
+                                       startPoint: CGPoint(x: 0, y: 40), endPoint: CGPoint(x: 0, y: 86))
+                ink = c(0x1C2A4D)
+                white = c(0xF6F9FF); skin = c(0xF8DDC8); hair = c(0xF5CF6E)
+                steel = .linearGradient(Gradient(colors: [Color(hex: 0xF3F7FF), Color(hex: 0x9DB2D6)]),
+                                        startPoint: CGPoint(x: 76, y: 0), endPoint: CGPoint(x: 84, y: 0))
+                outline = c(0x1C2A4D)
+                sheen = 0.42
+            }
+        }
     }
 
-    private let p = Palette()
+    private var p: Palette { Palette(style: style) }
     private var d: CourtDesign { art.design }
 
     // MARK: Rendering
 
     private func render(in ctx: inout GraphicsContext, size: CGSize) {
-        ctx.fill(Path(CGRect(origin: .zero, size: size)), with: .color(.white))
+        let palette = p
+        ctx.fill(Path(CGRect(origin: .zero, size: size)),
+                 with: .linearGradient(Gradient(colors: palette.paper), startPoint: .zero,
+                                       endPoint: CGPoint(x: 0, y: size.height)))
+        defer {
+            // Glossy highlight sweeping across the upper-left, like light on glass.
+            if palette.sheen > 0 {
+                var gloss = Path()
+                gloss.move(to: P(0, 0)); gloss.addLine(to: P(100, 0)); gloss.addLine(to: P(100, 18))
+                gloss.addQuadCurve(to: P(0, 62), control: P(40, 30)); gloss.closeSubpath()
+                ctx.fill(gloss, with: .linearGradient(Gradient(colors: [.white.opacity(palette.sheen), .white.opacity(0)]),
+                                                      startPoint: P(10, 0), endPoint: P(45, 55)))
+            }
+        }
         ctx.scaleBy(x: size.width / 100, y: size.height / 126)
         let emblem = ctx.resolveSymbol(id: 0)
 
