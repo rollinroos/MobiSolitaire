@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0394D19B299F131C4A0F81DA /* Klondike.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6516951BB68B21513FE82E73 /* Klondike.swift */; };
+		351B313C46F2E2FD0C3986B3 /* CardBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B905682ABE27F0C377347274 /* CardBack.swift */; };
 		672B2B84BE0092A051C0E7C6 /* TableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAF426932A90E8EC20F02 /* TableLayout.swift */; };
 		6D8D5CC59473699B7B9C5216 /* CourtPortrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBC8E45D966A990D21AE92B /* CourtPortrait.swift */; };
 		764E923DB88FE55BB9BDC966 /* CardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5198851C29E84DEA011A7496 /* CardStyle.swift */; };
@@ -31,6 +32,7 @@
 		6516951BB68B21513FE82E73 /* Klondike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Klondike.swift; sourceTree = "<group>"; };
 		7D67F7911E127A089B8FC962 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		91346649DA5363C64A6A7B32 /* Solitaire.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Solitaire.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B905682ABE27F0C377347274 /* CardBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBack.swift; sourceTree = "<group>"; };
 		BEBC8E45D966A990D21AE92B /* CourtPortrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourtPortrait.swift; sourceTree = "<group>"; };
 		C568BF05C800FC5ACC314BD2 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		CF4FAF426932A90E8EC20F02 /* TableLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableLayout.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 		DC65FBC697E1152D6A4BDBBD /* Cards */ = {
 			isa = PBXGroup;
 			children = (
+				B905682ABE27F0C377347274 /* CardBack.swift */,
 				5198851C29E84DEA011A7496 /* CardStyle.swift */,
 				296C6455215B34B985250C61 /* CardStyleGallery.swift */,
 				DA311DB901320C5EAED8F1B8 /* CardView.swift */,
@@ -172,6 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3589283BB510400D09F5BF8 /* Card.swift in Sources */,
+				351B313C46F2E2FD0C3986B3 /* CardBack.swift in Sources */,
 				764E923DB88FE55BB9BDC966 /* CardStyle.swift in Sources */,
 				85B50A7462F9A28C805ACFFE /* CardStyleGallery.swift in Sources */,
 				99E59A383192635F448A52B0 /* CardView.swift in Sources */,

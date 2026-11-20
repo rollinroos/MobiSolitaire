@@ -96,12 +96,46 @@ struct CardStyleGallery: View {
                 try? data.write(to: docs.appendingPathComponent("face-cards-\(i + 1).png"))
             }
         }
+        let backs = ImageRenderer(content: BackGallery())
+        backs.scale = 2
+        if let data = backs.uiImage?.pngData() {
+            try? data.write(to: docs.appendingPathComponent("card-backs.png"))
+        }
         let glass = ImageRenderer(content: CardStyleGallery(style: .glass, arts: [.regal]))
         glass.scale = 2
         glass.proposedSize = ProposedViewSize(width: width, height: nil)
         if let data = glass.uiImage?.pngData() {
             try? data.write(to: docs.appendingPathComponent("face-cards-glass.png"))
         }
+    }
+}
+
+/// Both card backs, large and at game size (stock pile and a tableau column).
+private struct BackGallery: View {
+    var body: some View {
+        HStack(alignment: .top, spacing: 48) {
+            ForEach(CardStyle.allCases) { style in
+                VStack(alignment: .leading, spacing: 14) {
+                    Text(style.name).font(.title2.weight(.bold)).foregroundStyle(.white)
+                    HStack(alignment: .top, spacing: 18) {
+                        CardView(card: Card(suit: .spades, rank: 1), size: CGSize(width: 160, height: 224))
+                        VStack(alignment: .leading, spacing: 10) {
+                            CardView(card: Card(suit: .hearts, rank: 2), size: CGSize(width: 50, height: 70))
+                            ZStack(alignment: .top) {
+                                ForEach(0..<4) { k in
+                                    CardView(card: Card(suit: .clubs, rank: 3 + k, faceUp: k == 3),
+                                             size: CGSize(width: 50, height: 70))
+                                        .offset(y: CGFloat(k) * 8.4)
+                                }
+                            }
+                        }
+                    }
+                }
+                .environment(\.cardStyle, style)
+            }
+        }
+        .padding(28)
+        .background(FeltBackground())
     }
 }
 
