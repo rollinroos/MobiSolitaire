@@ -6,6 +6,8 @@ struct CardPlacement: Identifiable {
     let index: Int
     let center: CGPoint
     let z: Double
+    /// False for cards hidden deep in a pile (no shadow needed).
+    var raised = true
 
     var id: String { card.id }
 }
@@ -66,7 +68,8 @@ struct TableLayout {
 
         let stockCenter = slotCenter(.stock)
         for (k, card) in table.stock.enumerated() {
-            out.append(.init(card: card, pile: .stock, index: k, center: stockCenter, z: Double(k)))
+            out.append(.init(card: card, pile: .stock, index: k, center: stockCenter, z: Double(k),
+                             raised: k >= table.stock.count - 2))
         }
 
         let wasteCenter = slotCenter(.waste)
@@ -75,13 +78,15 @@ struct TableLayout {
         for (k, card) in table.waste.enumerated() {
             let dx = k >= firstShown ? CGFloat(k - firstShown) * wasteFan : 0
             out.append(.init(card: card, pile: .waste, index: k,
-                             center: CGPoint(x: wasteCenter.x + dx, y: wasteCenter.y), z: 100 + Double(k)))
+                             center: CGPoint(x: wasteCenter.x + dx, y: wasteCenter.y), z: 100 + Double(k),
+                             raised: k >= firstShown - 1))
         }
 
         for (i, pile) in table.foundations.enumerated() {
             let center = slotCenter(.foundation(i))
             for (k, card) in pile.enumerated() {
-                out.append(.init(card: card, pile: .foundation(i), index: k, center: center, z: 200 + Double(k)))
+                out.append(.init(card: card, pile: .foundation(i), index: k, center: center, z: 200 + Double(k),
+                                 raised: k >= pile.count - 2))
             }
         }
 

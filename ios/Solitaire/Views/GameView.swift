@@ -5,8 +5,11 @@ struct GameView: View {
     @State private var drag: DragState?
     @State private var finishing = false
     @State private var pendingDrawCount: Int?
+    @AppStorage("cardStyle") private var cardStyleRaw = CardStyle.classic.rawValue
     @Environment(\.scenePhase) private var scenePhase
     @Namespace private var glass
+
+    private var cardStyle: CardStyle { CardStyle(rawValue: cardStyleRaw) ?? .classic }
 
     private struct DragState {
         var from: PileRef
@@ -23,6 +26,7 @@ struct GameView: View {
             let layout = TableLayout(size: geo.size)
             table(layout)
         }
+        .environment(\.cardStyle, cardStyle)
         .padding(.top, 12)
         .background { FeltBackground().ignoresSafeArea() }
         .safeAreaInset(edge: .top) { header }
@@ -98,15 +102,24 @@ struct GameView: View {
         let isDragged = drag?.ids.contains(p.card.id) == true
         let z = isDragged ? 1000 + Double(p.index)
             : p.z + (store.lastMoved.contains(p.card.id) ? 500 : 0)
-        return CardView(card: p.card, size: layout.cardSize)
-            .scaleEffect(isDragged ? 1.06 : 1)
-            .shadow(color: .black.opacity(isDragged ? 0.35 : 0), radius: 10, y: 8)
+        return CardView(card: p.card, size: layout.cardSize, raised: p.raised || isDragged)
+            .rotation3DEffect(.degrees(isDragged ? tilt(drag!.translation.width) : 0),
+                              axis: (x: 0, y: 1, z: 0), perspective: 0.6)
+            .rotation3DEffect(.degrees(isDragged ? -tilt(drag!.translation.height) * 0.6 : 0),
+                              axis: (x: 1, y: 0, z: 0), perspective: 0.6)
+            .scaleEffect(isDragged ? 1.08 : 1)
+            .shadow(color: .black.opacity(isDragged ? 0.35 : 0), radius: 14, y: 12)
             .offset(isDragged ? drag!.translation : .zero)
             .onTapGesture { tap(p) }
             .gesture(dragGesture(p, layout))
             .position(p.center)
             .zIndex(z)
             .allowsHitTesting(!finishing)
+    }
+
+    /// Lifts and leans the card toward the direction it's dragged, up to 12°.
+    private func tilt(_ distance: CGFloat) -> Double {
+        max(-12, min(12, Double(distance) * 0.08))
     }
 
     private func dragGesture(_ p: CardPlacement, _ layout: TableLayout) -> some Gesture {
@@ -210,6 +223,19 @@ struct GameView: View {
             .padding(.horizontal, 14)
             .padding(.vertical, 9)
             .glassEffect(.regular, in: .capsule)
+
+            Button {
+                withAnimation(.smooth(duration: 0.35)) { cardStyleRaw = cardStyle.next.rawValue }
+            } label: {
+                Image(systemName: cardStyle.symbol)
+                    .font(.system(size: 16, weight: .semibold))
+                    .contentTransition(.symbolEffect(.replace))
+                    .frame(width: 22, height: 22)
+            }
+            .buttonStyle(.glass)
+            .buttonBorderShape(.circle)
+            .accessibilityLabel("Card style: \(cardStyle.name)")
+            .accessibilityHint("Switches to \(cardStyle.next.name) cards")
         }
         .padding(.horizontal, 16)
         .padding(.top, 4)

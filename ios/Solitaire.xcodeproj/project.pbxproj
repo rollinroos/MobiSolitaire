@@ -7,10 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02BDC0125168A3F002885F92 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B2B34F7B5FA290B9B7404AD /* CardView.swift */; };
 		0394D19B299F131C4A0F81DA /* Klondike.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6516951BB68B21513FE82E73 /* Klondike.swift */; };
 		672B2B84BE0092A051C0E7C6 /* TableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAF426932A90E8EC20F02 /* TableLayout.swift */; };
+		6D8D5CC59473699B7B9C5216 /* CourtPortrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBC8E45D966A990D21AE92B /* CourtPortrait.swift */; };
+		764E923DB88FE55BB9BDC966 /* CardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5198851C29E84DEA011A7496 /* CardStyle.swift */; };
 		85A55743DC993674365CFDCC /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D67F7911E127A089B8FC962 /* GameView.swift */; };
+		85B50A7462F9A28C805ACFFE /* CardStyleGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296C6455215B34B985250C61 /* CardStyleGallery.swift */; };
+		8C837C71472947BFFA9DB491 /* PipLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB4E655190633570B313A53 /* PipLayout.swift */; };
+		99E59A383192635F448A52B0 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA311DB901320C5EAED8F1B8 /* CardView.swift */; };
 		B57A6776A203A289ED0CEF3C /* GameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4094C6E1FDC724871DBFB210 /* GameStore.swift */; };
 		D3589283BB510400D09F5BF8 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AD432F3FC783B53B8A2272 /* Card.swift */; };
 		D717469B2556BAA79A1B34A8 /* SolitaireApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1025A362D1D3FC2348642BE7 /* SolitaireApp.swift */; };
@@ -20,15 +24,19 @@
 
 /* Begin PBXFileReference section */
 		1025A362D1D3FC2348642BE7 /* SolitaireApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolitaireApp.swift; sourceTree = "<group>"; };
-		1B2B34F7B5FA290B9B7404AD /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		1BB4E655190633570B313A53 /* PipLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PipLayout.swift; sourceTree = "<group>"; };
+		296C6455215B34B985250C61 /* CardStyleGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStyleGallery.swift; sourceTree = "<group>"; };
 		4094C6E1FDC724871DBFB210 /* GameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStore.swift; sourceTree = "<group>"; };
+		5198851C29E84DEA011A7496 /* CardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStyle.swift; sourceTree = "<group>"; };
 		6516951BB68B21513FE82E73 /* Klondike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Klondike.swift; sourceTree = "<group>"; };
 		7D67F7911E127A089B8FC962 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		91346649DA5363C64A6A7B32 /* Solitaire.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Solitaire.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEBC8E45D966A990D21AE92B /* CourtPortrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourtPortrait.swift; sourceTree = "<group>"; };
 		C568BF05C800FC5ACC314BD2 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		CF4FAF426932A90E8EC20F02 /* TableLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableLayout.swift; sourceTree = "<group>"; };
 		CF80EC7B191F35D760DE535E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D2AD432F3FC783B53B8A2272 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		DA311DB901320C5EAED8F1B8 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -43,9 +51,9 @@
 		72F6F73CBB66EF014A33ABE0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				1B2B34F7B5FA290B9B7404AD /* CardView.swift */,
 				7D67F7911E127A089B8FC962 /* GameView.swift */,
 				CF4FAF426932A90E8EC20F02 /* TableLayout.swift */,
+				DC65FBC697E1152D6A4BDBBD /* Cards */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -78,6 +86,18 @@
 				6516951BB68B21513FE82E73 /* Klondike.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		DC65FBC697E1152D6A4BDBBD /* Cards */ = {
+			isa = PBXGroup;
+			children = (
+				5198851C29E84DEA011A7496 /* CardStyle.swift */,
+				296C6455215B34B985250C61 /* CardStyleGallery.swift */,
+				DA311DB901320C5EAED8F1B8 /* CardView.swift */,
+				BEBC8E45D966A990D21AE92B /* CourtPortrait.swift */,
+				1BB4E655190633570B313A53 /* PipLayout.swift */,
+			);
+			path = Cards;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -152,10 +172,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3589283BB510400D09F5BF8 /* Card.swift in Sources */,
-				02BDC0125168A3F002885F92 /* CardView.swift in Sources */,
+				764E923DB88FE55BB9BDC966 /* CardStyle.swift in Sources */,
+				85B50A7462F9A28C805ACFFE /* CardStyleGallery.swift in Sources */,
+				99E59A383192635F448A52B0 /* CardView.swift in Sources */,
+				6D8D5CC59473699B7B9C5216 /* CourtPortrait.swift in Sources */,
 				B57A6776A203A289ED0CEF3C /* GameStore.swift in Sources */,
 				85A55743DC993674365CFDCC /* GameView.swift in Sources */,
 				0394D19B299F131C4A0F81DA /* Klondike.swift in Sources */,
+				8C837C71472947BFFA9DB491 /* PipLayout.swift in Sources */,
 				D717469B2556BAA79A1B34A8 /* SolitaireApp.swift in Sources */,
 				672B2B84BE0092A051C0E7C6 /* TableLayout.swift in Sources */,
 			);
