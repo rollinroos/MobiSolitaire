@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Solitaire</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="title">Solitaire</div>
+    <div class="stats">
+      <span>Moves <strong id="moves">0</strong></span>
+      <span>Time <strong id="time">0:00</strong></span>
+    </div>
+    <div class="controls">
+      <select id="draw-mode" aria-label="Draw mode">
+        <option value="1">Draw 1</option>
+        <option value="3">Draw 3</option>
+      </select>
+      <button id="undo" type="button" title="Undo (Ctrl/Cmd+Z)">Undo</button>
+      <button id="new-game" type="button" title="New game (N)">New game</button>
+    </div>
+  </header>
+
+  <main id="board" aria-label="Solitaire table">
+    <div class="pile stock" data-pile="stock"></div>
+    <div class="pile waste" data-pile="waste"></div>
+    <div class="spacer"><button id="auto-finish" type="button" hidden>Auto-finish</button></div>
+    <div class="pile foundation" data-pile="foundation" data-index="0" data-label="♠"></div>
+    <div class="pile foundation" data-pile="foundation" data-index="1" data-label="♥"></div>
+    <div class="pile foundation" data-pile="foundation" data-index="2" data-label="♦"></div>
+    <div class="pile foundation" data-pile="foundation" data-index="3" data-label="♣"></div>
+    <div class="pile tableau" data-pile="tableau" data-index="0"></div>
+    <div class="pile tableau" data-pile="tableau" data-index="1"></div>
+    <div class="pile tableau" data-pile="tableau" data-index="2"></div>
+    <div class="pile tableau" data-pile="tableau" data-index="3"></div>
+    <div class="pile tableau" data-pile="tableau" data-index="4"></div>
+    <div class="pile tableau" data-pile="tableau" data-index="5"></div>
+    <div class="pile tableau" data-pile="tableau" data-index="6"></div>
+  </main>
+
+  <div id="win" class="overlay" hidden>
+    <div class="dialog">
+      <h2>You won!</h2>
+      <p id="win-summary"></p>
+      <button id="play-again" type="button">Play again</button>
+    </div>
+  </div>
+
+  <script src="src/game.js"></script>
+  <script src="src/main.js"></script>
+</body>
+</html>
