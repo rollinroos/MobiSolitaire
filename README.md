@@ -19,6 +19,10 @@ Before you run it on a real device, set your own team and bundle ID (it's `com.e
 - `Model/GameStore.swift`: observable store, persistence, timer
 - `Views/GameView.swift`: the table, gestures, and Liquid Glass controls
 - `Views/TableLayout.swift`: card geometry and drop-target hit testing
+- `AppIcon.icon`: layered Liquid Glass app icon (open it in Icon Composer to edit)
+
+Icon concepts and the script that generates them are in `design/icons/`
+(`python3 design/icons/make_icons.py`).
 
 ## Web version (root)
 

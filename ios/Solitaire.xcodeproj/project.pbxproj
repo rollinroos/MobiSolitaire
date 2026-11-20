@@ -15,6 +15,7 @@
 		D3589283BB510400D09F5BF8 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AD432F3FC783B53B8A2272 /* Card.swift */; };
 		D717469B2556BAA79A1B34A8 /* SolitaireApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1025A362D1D3FC2348642BE7 /* SolitaireApp.swift */; };
 		F1983517E85E41E5F2A1C41B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF80EC7B191F35D760DE535E /* Assets.xcassets */; };
+		FAA8E7136AC4D02BF1130385 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = C568BF05C800FC5ACC314BD2 /* AppIcon.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		6516951BB68B21513FE82E73 /* Klondike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Klondike.swift; sourceTree = "<group>"; };
 		7D67F7911E127A089B8FC962 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		91346649DA5363C64A6A7B32 /* Solitaire.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Solitaire.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C568BF05C800FC5ACC314BD2 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		CF4FAF426932A90E8EC20F02 /* TableLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableLayout.swift; sourceTree = "<group>"; };
 		CF80EC7B191F35D760DE535E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D2AD432F3FC783B53B8A2272 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -51,6 +53,7 @@
 		9E8929446A897454B5D83965 /* Solitaire */ = {
 			isa = PBXGroup;
 			children = (
+				C568BF05C800FC5ACC314BD2 /* AppIcon.icon */,
 				CF80EC7B191F35D760DE535E /* Assets.xcassets */,
 				1025A362D1D3FC2348642BE7 /* SolitaireApp.swift */,
 				C3AFE7A3EF2EEA76A148E81C /* Model */,
@@ -136,6 +139,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAA8E7136AC4D02BF1130385 /* AppIcon.icon in Resources */,
 				F1983517E85E41E5F2A1C41B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
