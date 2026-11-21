@@ -63,6 +63,15 @@ private struct CardBackArtwork: View {
                    petal: [Color(hex: 0xFF8FB0), Color(hex: 0xE23B63)],
                    heart: [Color(hex: 0xFFFFFF), Color(hex: 0xC9DCFF)],
                    gloss: 0.38)
+        case .large:
+            // Bold, flat blue so face-down cards are unmistakable next to white faces.
+            Colors(border: .white,
+                   field: [Color(hex: 0x0A3BA8), Color(hex: 0x0A3BA8)],
+                   medallion: [Color(hex: 0x062A7A), Color(hex: 0x062A7A)],
+                   line: .white,
+                   petal: [Color(hex: 0xFFD60A), Color(hex: 0xFFB800)],
+                   heart: [.white, .white],
+                   gloss: 0)
         }
     }
 

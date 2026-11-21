@@ -12,41 +12,98 @@ struct CardPlacement: Identifiable {
     var id: String { card.id }
 }
 
+/// Where the stock/waste and foundation row sits.
+enum TableArrangement: String, CaseIterable {
+    /// Classic: row on top, deck on the left.
+    case deckLeft
+    /// Row on top, deck on the right and foundations on the left.
+    case deckRight
+    /// Row at the bottom just above the controls, deck on the right.
+    case bottom
+
+    var next: TableArrangement {
+        switch self {
+        case .deckLeft: .deckRight
+        case .deckRight: .bottom
+        case .bottom: .deckLeft
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .deckLeft: "rectangle.lefthalf.inset.filled"
+        case .deckRight: "rectangle.righthalf.inset.filled"
+        case .bottom: "rectangle.bottomhalf.inset.filled"
+        }
+    }
+
+    var name: String {
+        switch self {
+        case .deckLeft: "Deck top left"
+        case .deckRight: "Deck top right"
+        case .bottom: "Deck bottom right"
+        }
+    }
+
+    var deckOnRight: Bool { self != .deckLeft }
+}
+
 /// Geometry of the table for a given container size.
 struct TableLayout {
     let cardSize: CGSize
     let gap: CGFloat
     private let columnX: [CGFloat]
     private let tableauTop: CGFloat
+    /// Vertical center of the stock/waste/foundation row.
+    private let rowY: CGFloat
     private let availableFanHeight: CGFloat
+    private let fanRatio: CGFloat
+    /// Stock and waste on the right, foundations on the left (mirror of the usual row).
+    private let deckOnRight: Bool
 
-    private var fanUp: CGFloat { cardSize.height * 0.28 }
+    private var fanUp: CGFloat { cardSize.height * fanRatio }
     private var fanDown: CGFloat { cardSize.height * 0.12 }
     private var wasteFan: CGFloat { cardSize.width * 0.3 }
 
-    init(size: CGSize) {
+    init(size: CGSize, fanRatio: CGFloat = 0.28, arrangement: TableArrangement = .deckLeft) {
+        self.fanRatio = fanRatio
+        self.deckOnRight = arrangement.deckOnRight
         let margin: CGFloat = 8
         let gap: CGFloat = 6
         let width = max(20, min((size.width - 2 * margin - 6 * gap) / 7, 100))
         let height = width * 1.4
         let total = 7 * width + 6 * gap
         let x0 = (size.width - total) / 2 + width / 2
-        let top = height + gap * 3
+        // Push the table down so a full King-to-2 run (12 face-up cards) ends just
+        // above whatever is below it, instead of leaving empty felt at the bottom.
+        let rowsHeight = height + gap * 3
+        let fullRun = 11 * height * fanRatio + height
         self.gap = gap
         cardSize = CGSize(width: width, height: height)
         columnX = (0..<7).map { x0 + CGFloat($0) * (width + gap) }
-        tableauTop = top
-        availableFanHeight = max(0, size.height - top - height)
+        if arrangement == .bottom {
+            // Row sits just above the controls; the tableau runs down to meet it.
+            let row = size.height - height / 2 - 2
+            let tableauBottom = row - height / 2 - gap * 3
+            rowY = row
+            tableauTop = max(0, tableauBottom - fullRun)
+            availableFanHeight = max(0, tableauBottom - tableauTop - height)
+        } else {
+            let origin = max(0, size.height - rowsHeight - fullRun - 6)
+            rowY = origin + height / 2
+            tableauTop = origin + rowsHeight
+            availableFanHeight = max(0, size.height - tableauTop - height)
+        }
     }
 
     var cornerRadius: CGFloat { cardSize.width * 0.12 }
 
     func slotCenter(_ pile: PileRef) -> CGPoint {
-        let topY = cardSize.height / 2
+        let topY = rowY
         switch pile {
-        case .stock: return CGPoint(x: columnX[0], y: topY)
-        case .waste: return CGPoint(x: columnX[1], y: topY)
-        case .foundation(let i): return CGPoint(x: columnX[3 + i], y: topY)
+        case .stock: return CGPoint(x: columnX[deckOnRight ? 6 : 0], y: topY)
+        case .waste: return CGPoint(x: columnX[deckOnRight ? 5 : 1], y: topY)
+        case .foundation(let i): return CGPoint(x: columnX[deckOnRight ? i : 3 + i], y: topY)
         case .tableau(let i): return CGPoint(x: columnX[i], y: tableauTop + cardSize.height / 2)
         }
     }
@@ -76,7 +133,8 @@ struct TableLayout {
         let shown = min(drawCount == 3 ? 3 : 1, table.waste.count)
         let firstShown = table.waste.count - shown
         for (k, card) in table.waste.enumerated() {
-            let dx = k >= firstShown ? CGFloat(k - firstShown) * wasteFan : 0
+            // Drawn cards fan away from the stock, toward the middle of the table.
+            let dx = k >= firstShown ? CGFloat(k - firstShown) * wasteFan * (deckOnRight ? -1 : 1) : 0
             out.append(.init(card: card, pile: .waste, index: k,
                              center: CGPoint(x: wasteCenter.x + dx, y: wasteCenter.y), z: 100 + Double(k),
                              raised: k >= firstShown - 1))

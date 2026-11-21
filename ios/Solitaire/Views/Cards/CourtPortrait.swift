@@ -113,7 +113,7 @@ struct CourtFigure: View {
         init(style: CardStyle) {
             func c(_ hex: UInt32) -> GraphicsContext.Shading { .color(Color(hex: hex)) }
             switch style {
-            case .classic:
+            case .classic, .large: // Large Print shows letters, not portraits
                 paper = [.white, .white]
                 red = c(0xC8102E); yellow = c(0xF2C230); blue = c(0x2756A8); ink = c(0x111111)
                 white = c(0xFFFFFF); skin = c(0xF7DCC4); hair = c(0xF2C230)

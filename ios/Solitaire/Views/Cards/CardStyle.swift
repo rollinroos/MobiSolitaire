@@ -3,7 +3,7 @@ import SwiftUI
 /// Visual themes for the deck. Both share the same layout and 3D treatment;
 /// they differ in materials, colors, typography and card backs.
 enum CardStyle: String, CaseIterable, Identifiable {
-    case classic, glass
+    case classic, glass, large
 
     var id: String { rawValue }
 
@@ -11,6 +11,7 @@ enum CardStyle: String, CaseIterable, Identifiable {
         switch self {
         case .classic: "Classic"
         case .glass: "Glass"
+        case .large: "Large Print"
         }
     }
 
@@ -19,10 +20,21 @@ enum CardStyle: String, CaseIterable, Identifiable {
         switch self {
         case .classic: "suit.spade.fill"
         case .glass: "drop.fill"
+        case .large: "textformat.size"
         }
     }
 
-    var next: CardStyle { self == .classic ? .glass : .classic }
+    var next: CardStyle {
+        switch self {
+        case .classic: .glass
+        case .glass: .large
+        case .large: .classic
+        }
+    }
+
+    /// How much of each face-up card shows in a tableau column. Large Print shows more
+    /// so its oversized rank and suit stay readable when cards overlap.
+    var fanRatio: CGFloat { self == .large ? 0.44 : 0.28 }
 
     // MARK: Face
 
@@ -30,6 +42,7 @@ enum CardStyle: String, CaseIterable, Identifiable {
         switch self {
         case .classic: [Color(hex: 0xFFFDF6), Color(hex: 0xF3ECDC)]
         case .glass: [Color(hex: 0xFFFFFF), Color(hex: 0xE4ECF7)]
+        case .large: [.white, .white]
         }
     }
 
@@ -37,17 +50,26 @@ enum CardStyle: String, CaseIterable, Identifiable {
         switch self {
         case .classic: suit.isRed ? Color(hex: 0xC4122F) : Color(hex: 0x1A1E29)
         case .glass: suit.isRed ? Color(hex: 0xE23B63) : Color(hex: 0x1C2A4D)
+        // Strongest contrast on white: pure black and a deep, saturated red.
+        case .large: suit.isRed ? Color(hex: 0xC80000) : .black
         }
     }
 
-    var indexDesign: Font.Design { self == .classic ? .serif : .rounded }
-    var indexWeight: Font.Weight { self == .classic ? .bold : .semibold }
+    var indexDesign: Font.Design { self == .glass ? .rounded : .serif }
+    var indexWeight: Font.Weight {
+        switch self {
+        case .classic: .bold
+        case .glass: .semibold
+        case .large: .bold
+        }
+    }
 
     /// Metallic trim used on face-card frames and the ace ring.
     var accent: [Color] {
         switch self {
         case .classic: [Color(hex: 0xD6B25E), Color(hex: 0x8C6A22)]
         case .glass: [Color(hex: 0x9CC8FF), Color(hex: 0x5B7FD6)]
+        case .large: [.black, .black]
         }
     }
 
@@ -58,10 +80,22 @@ enum CardStyle: String, CaseIterable, Identifiable {
     }
 
     /// The darker card-edge color that shows as the card's thickness.
-    var edge: Color { self == .classic ? Color(hex: 0xCFC4AA) : Color(hex: 0xA9B9D3) }
+    var edge: Color {
+        switch self {
+        case .classic: Color(hex: 0xCFC4AA)
+        case .glass: Color(hex: 0xA9B9D3)
+        case .large: Color(hex: 0x8A8A8A)
+        }
+    }
 
     /// Gloss strength across the top of the face.
-    var gloss: Double { self == .glass ? 0.75 : 0.3 }
+    var gloss: Double {
+        switch self {
+        case .classic: 0.3
+        case .glass: 0.75
+        case .large: 0 // no sheen, so nothing washes out the ink
+        }
+    }
 
     // MARK: Back
 
@@ -69,10 +103,11 @@ enum CardStyle: String, CaseIterable, Identifiable {
         switch self {
         case .classic: [Color(hex: 0x2A4D8F), Color(hex: 0x14295A)]
         case .glass: [Color(hex: 0x4FA3FF), Color(hex: 0x3B2FBF)]
+        case .large: [Color(hex: 0x0A3BA8), Color(hex: 0x0A3BA8)]
         }
     }
 
-    var backTrim: Color { self == .classic ? Color(hex: 0xFFFDF6) : .white.opacity(0.9) }
+    var backTrim: Color { self == .glass ? .white.opacity(0.9) : Color(hex: 0xFFFDF6) }
 }
 
 extension EnvironmentValues {

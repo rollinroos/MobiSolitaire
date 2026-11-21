@@ -107,6 +107,12 @@ struct CardStyleGallery: View {
         if let data = glass.uiImage?.pngData() {
             try? data.write(to: docs.appendingPathComponent("face-cards-glass.png"))
         }
+        let large = ImageRenderer(content: CardStyleGallery(style: .large, arts: [.regal]))
+        large.scale = 2
+        large.proposedSize = ProposedViewSize(width: width, height: nil)
+        if let data = large.uiImage?.pngData() {
+            try? data.write(to: docs.appendingPathComponent("face-cards-large.png"))
+        }
     }
 }
 

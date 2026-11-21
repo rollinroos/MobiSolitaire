@@ -6,10 +6,12 @@ struct GameView: View {
     @State private var finishing = false
     @State private var pendingDrawCount: Int?
     @AppStorage("cardStyle") private var cardStyleRaw = CardStyle.classic.rawValue
+    @AppStorage("tableArrangement") private var arrangementRaw = TableArrangement.deckLeft.rawValue
     @Environment(\.scenePhase) private var scenePhase
     @Namespace private var glass
 
     private var cardStyle: CardStyle { CardStyle(rawValue: cardStyleRaw) ?? .classic }
+    private var arrangement: TableArrangement { TableArrangement(rawValue: arrangementRaw) ?? .deckLeft }
 
     private struct DragState {
         var from: PileRef
@@ -23,7 +25,7 @@ struct GameView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let layout = TableLayout(size: geo.size)
+            let layout = TableLayout(size: geo.size, fanRatio: cardStyle.fanRatio, arrangement: arrangement)
             table(layout)
         }
         .environment(\.cardStyle, cardStyle)
@@ -209,36 +211,57 @@ struct GameView: View {
     // MARK: Chrome
 
     private var header: some View {
-        HStack {
-            Text("Solitaire")
-                .font(.title2.weight(.bold))
-                .foregroundStyle(.white)
-            Spacer()
-            HStack(spacing: 14) {
-                Label("\(game.moves)", systemImage: "hand.tap")
-                Label(Self.formatTime(game.elapsed), systemImage: "timer")
+        HStack(spacing: 10) {
+            Button {
+                withAnimation(.smooth(duration: 0.35)) { arrangementRaw = arrangement.next.rawValue }
+            } label: {
+                Image(systemName: arrangement.symbol)
+                    .font(.system(size: 26, weight: .bold))
+                    .contentTransition(.symbolEffect(.replace))
+                    .frame(width: 44, height: 44)
             }
-            .font(.subheadline.weight(.semibold).monospacedDigit())
-            .labelStyle(.titleAndIcon)
-            .padding(.horizontal, 14)
-            .padding(.vertical, 9)
-            .glassEffect(.regular, in: .capsule)
+            .buttonStyle(.glass)
+            .buttonBorderShape(.circle)
+            .accessibilityLabel("Layout: \(arrangement.name)")
+            .accessibilityHint("Switches to \(arrangement.next.name)")
+
+            Spacer(minLength: 0)
+            // Full size when it fits; a step smaller on narrow phones or long times, never truncated.
+            ViewThatFits(in: .horizontal) {
+                counters(fontSize: 28)
+                counters(fontSize: 24)
+                counters(fontSize: 20)
+            }
 
             Button {
                 withAnimation(.smooth(duration: 0.35)) { cardStyleRaw = cardStyle.next.rawValue }
             } label: {
                 Image(systemName: cardStyle.symbol)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 26, weight: .bold))
                     .contentTransition(.symbolEffect(.replace))
-                    .frame(width: 22, height: 22)
+                    .frame(width: 44, height: 44)
             }
             .buttonStyle(.glass)
             .buttonBorderShape(.circle)
             .accessibilityLabel("Card style: \(cardStyle.name)")
             .accessibilityHint("Switches to \(cardStyle.next.name) cards")
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, 12)
         .padding(.top, 4)
+    }
+
+    private func counters(fontSize: CGFloat) -> some View {
+        HStack(spacing: fontSize * 0.55) {
+            Label("\(game.moves)", systemImage: "hand.tap")
+            Label(Self.formatTime(game.elapsed), systemImage: "timer")
+        }
+        .font(.system(size: fontSize, weight: .bold).monospacedDigit())
+        .labelStyle(.titleAndIcon)
+        .lineLimit(1)
+        .fixedSize()
+        .padding(.horizontal, fontSize * 0.7)
+        .padding(.vertical, 16)
+        .glassEffect(.regular, in: .capsule)
     }
 
     private var controls: some View {
@@ -278,7 +301,8 @@ struct GameView: View {
                     .glassEffectID("finish", in: glass)
                 }
             }
-            .controlSize(.large)
+            .controlSize(.regular)
+            .font(.system(size: 20.5)) // 20% above the regular 17 pt, so the glass buttons scale with it
         }
         .animation(.bouncy, value: game.canAutoFinish)
         .padding(.bottom, 8)

@@ -14,7 +14,9 @@ struct CardView: View {
 
     var body: some View {
         ZStack {
-            if card.faceUp {
+            if card.faceUp && style == .large {
+                LargePrintFace(card: card, size: size, ink: style.ink(card.suit))
+            } else if card.faceUp {
                 CardFace(card: card, size: size, style: style)
             } else {
                 CardBack(size: size, style: style)
@@ -116,6 +118,37 @@ private struct CardFace: View {
     }
 }
 
+/// High-contrast face for low vision: an oversized rank across the top (the part
+/// that stays visible in a tableau column) and one large suit symbol below.
+/// Court cards show their letter instead of a portrait so they read at a glance.
+private struct LargePrintFace: View {
+    let card: Card
+    let size: CGSize
+    let ink: Color
+
+    var body: some View {
+        let w = size.width, h = size.height
+        ZStack(alignment: .top) {
+            Color.white
+            Text(card.rankLabel)
+                .font(.system(size: w * 0.64, weight: CardStyle.classic.indexWeight, design: CardStyle.classic.indexDesign))
+                .tracking(card.rank == 10 ? -w * 0.05 : 0)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5) // only kicks in for "10" on narrow cards
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(width: w * 0.94)
+                .padding(.top, -w * 0.06)
+            // Same embossed pip as the Classic deck, just larger.
+            Pip(suit: card.suit, size: w * 0.66, color: ink)
+                .position(x: w / 2, y: h * 0.71)
+        }
+        .foregroundStyle(ink)
+        .overlay(RoundedRectangle(cornerRadius: w * 0.1, style: .continuous)
+            .strokeBorder(.black.opacity(0.45), lineWidth: max(1, w * 0.025)))
+        .drawingGroup()
+    }
+}
+
 /// Framed double-ended court figure for J, Q and K.
 private struct CourtPanel: View {
     let card: Card
@@ -186,6 +219,8 @@ private struct Pip: View {
         CardView(card: Card(suit: .hearts, rank: 12, faceUp: true), size: CGSize(width: 100, height: 140))
         CardView(card: Card(suit: .spades, rank: 13, faceUp: true), size: CGSize(width: 100, height: 140))
         CardView(card: Card(suit: .clubs, rank: 11), size: CGSize(width: 100, height: 140))
+        CardView(card: Card(suit: .diamonds, rank: 10, faceUp: true), size: CGSize(width: 100, height: 140))
+            .environment(\.cardStyle, .large)
     }
     .padding()
     .background(.green)
