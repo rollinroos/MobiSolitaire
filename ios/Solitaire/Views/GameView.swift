@@ -22,6 +22,7 @@ struct GameView: View {
     }
 
     private var game: Klondike { store.game }
+    private var clockShouldRun: Bool { store.clockRunning && scenePhase == .active }
 
     var body: some View {
         GeometryReader { geo in
@@ -43,17 +44,19 @@ struct GameView: View {
         } message: {
             Text("Your current game will be lost.")
         }
-        .sensoryFeedback(.impact(weight: .light), trigger: game.moves)
-        .sensoryFeedback(.warning, trigger: store.rejections)
         .sensoryFeedback(.success, trigger: game.won) { _, won in won }
-        .task {
+        // The clock task only exists while the game is in progress and on screen, so the
+        // app doesn't wake up every second before the first move, after a win or in the background.
+        .task(id: clockShouldRun) {
+            guard clockShouldRun else { return }
             while !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(1))
+                // A little tolerance lets iOS batch this wake-up with others.
+                try? await Task.sleep(for: .seconds(1), tolerance: .milliseconds(200))
+                if Task.isCancelled { break }
                 store.tick()
             }
         }
         .onChange(of: scenePhase) { _, phase in
-            store.isActive = phase == .active
             if phase != .active { store.save() }
         }
     }
@@ -144,8 +147,6 @@ struct GameView: View {
                 withAnimation(.snappy(duration: 0.28)) {
                     if let target {
                         store.move(from: d.from, index: d.index, to: target)
-                    } else {
-                        store.reject()
                     }
                     drag = nil
                 }
@@ -228,9 +229,9 @@ struct GameView: View {
             Spacer(minLength: 0)
             // Full size when it fits; a step smaller on narrow phones or long times, never truncated.
             ViewThatFits(in: .horizontal) {
-                counters(fontSize: 28)
-                counters(fontSize: 24)
-                counters(fontSize: 20)
+                CounterBar(store: store, fontSize: 28)
+                CounterBar(store: store, fontSize: 24)
+                CounterBar(store: store, fontSize: 20)
             }
 
             Button {
@@ -250,19 +251,6 @@ struct GameView: View {
         .padding(.top, 4)
     }
 
-    private func counters(fontSize: CGFloat) -> some View {
-        HStack(spacing: fontSize * 0.55) {
-            Label("\(game.moves)", systemImage: "hand.tap")
-            Label(Self.formatTime(game.elapsed), systemImage: "timer")
-        }
-        .font(.system(size: fontSize, weight: .bold).monospacedDigit())
-        .labelStyle(.titleAndIcon)
-        .lineLimit(1)
-        .fixedSize()
-        .padding(.horizontal, fontSize * 0.7)
-        .padding(.vertical, 16)
-        .glassEffect(.regular, in: .capsule)
-    }
 
     private var controls: some View {
         GlassEffectContainer(spacing: 12) {
@@ -317,7 +305,7 @@ struct GameView: View {
                     .foregroundStyle(.yellow.gradient)
                 Text("You Won!")
                     .font(.largeTitle.weight(.bold))
-                Text("\(game.moves) moves · \(Self.formatTime(game.elapsed))")
+                Text("\(game.moves) moves · \(Self.formatTime(store.elapsed))")
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 Button("Play Again") { startNewGame(drawCount: game.drawCount) }
@@ -334,6 +322,27 @@ struct GameView: View {
 
     static func formatTime(_ seconds: Int) -> String {
         String(format: "%d:%02d", seconds / 60, seconds % 60)
+    }
+}
+
+/// Move count and clock. Its own view so the per-second clock update redraws
+/// only this capsule rather than the whole table.
+private struct CounterBar: View {
+    let store: GameStore
+    let fontSize: CGFloat
+
+    var body: some View {
+        HStack(spacing: fontSize * 0.55) {
+            Label("\(store.game.moves)", systemImage: "hand.tap")
+            Label(GameView.formatTime(store.elapsed), systemImage: "timer")
+        }
+        .font(.system(size: fontSize, weight: .bold).monospacedDigit())
+        .labelStyle(.titleAndIcon)
+        .lineLimit(1)
+        .fixedSize()
+        .padding(.horizontal, fontSize * 0.7)
+        .padding(.vertical, 16)
+        .glassEffect(.regular, in: .capsule)
     }
 }
 

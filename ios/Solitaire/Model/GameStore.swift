@@ -8,25 +8,32 @@ final class GameStore {
     private(set) var game: Klondike
     /// Cards that changed pile in the most recent action; drawn on top while they fly.
     private(set) var lastMoved: Set<String> = []
-    /// Bumped whenever a move is rejected, to trigger feedback.
-    private(set) var rejections = 0
-    var isActive = true
+    /// Seconds played. Kept outside `game` so the once-a-second tick only redraws
+    /// the clock, not all 52 cards that depend on `game`.
+    private(set) var elapsed: Int
 
     private static let gameKey = "solitaire.game.v1"
     private static let drawKey = "solitaire.drawCount"
 
     init() {
+        let loaded: Klondike
         if let data = UserDefaults.standard.data(forKey: Self.gameKey),
            let saved = try? JSONDecoder().decode(Klondike.self, from: data) {
-            game = saved
+            loaded = saved
         } else {
-            game = Klondike(drawCount: UserDefaults.standard.integer(forKey: Self.drawKey))
+            loaded = Klondike(drawCount: UserDefaults.standard.integer(forKey: Self.drawKey))
         }
+        game = loaded
+        elapsed = loaded.elapsed
     }
+
+    /// The clock only runs between the first move and the win.
+    var clockRunning: Bool { game.started && !game.won }
 
     func newGame(drawCount: Int) {
         UserDefaults.standard.set(drawCount, forKey: Self.drawKey)
         game = Klondike(drawCount: drawCount)
+        elapsed = 0
         lastMoved = []
         save()
     }
@@ -46,9 +53,7 @@ final class GameStore {
 
     @discardableResult
     func autoMove(from: PileRef, index: Int) -> Bool {
-        let moved = perform { $0.autoMove(from: from, index: index) }
-        if !moved { rejections += 1 }
-        return moved
+        perform { $0.autoMove(from: from, index: index) }
     }
 
     @discardableResult
@@ -56,18 +61,17 @@ final class GameStore {
         perform { $0.autoFinishStep() }
     }
 
-    func reject() {
-        rejections += 1
-    }
-
+    /// Advances the clock. Deliberately doesn't save: the time is written with each
+    /// move and when the app leaves the foreground, not every few seconds.
     func tick() {
-        guard isActive, game.started, !game.won else { return }
-        game.elapsed += 1
-        if game.elapsed % 5 == 0 { save() }
+        guard clockRunning else { return }
+        elapsed += 1
     }
 
     func save() {
-        guard let data = try? JSONEncoder().encode(game) else { return }
+        var snapshot = game
+        snapshot.elapsed = elapsed
+        guard let data = try? JSONEncoder().encode(snapshot) else { return }
         UserDefaults.standard.set(data, forKey: Self.gameKey)
     }
 
