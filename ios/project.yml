@@ -1,6 +1,6 @@
 name: Solitaire
 options:
-  bundleIdPrefix: com.example
+  bundleIdPrefix: com.rollinroos
   deploymentTarget:
     iOS: "26.0"
   createIntermediateGroups: true
@@ -17,7 +17,7 @@ targets:
       - Solitaire
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.example.solitaire
+        PRODUCT_BUNDLE_IDENTIFIER: com.rollinroos.solitaire
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Solitaire
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
@@ -28,4 +28,5 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: 4S8R294RFW
         ENABLE_PREVIEWS: YES
