@@ -12,6 +12,7 @@
 		672B2B84BE0092A051C0E7C6 /* TableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4FAF426932A90E8EC20F02 /* TableLayout.swift */; };
 		6D8D5CC59473699B7B9C5216 /* CourtPortrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBC8E45D966A990D21AE92B /* CourtPortrait.swift */; };
 		764E923DB88FE55BB9BDC966 /* CardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5198851C29E84DEA011A7496 /* CardStyle.swift */; };
+		7CA7C06C6465E5024F0A9ED3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 9430164B3053780F6FE515B2 /* PrivacyInfo.xcprivacy */; };
 		85A55743DC993674365CFDCC /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D67F7911E127A089B8FC962 /* GameView.swift */; };
 		85B50A7462F9A28C805ACFFE /* CardStyleGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296C6455215B34B985250C61 /* CardStyleGallery.swift */; };
 		8C837C71472947BFFA9DB491 /* PipLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB4E655190633570B313A53 /* PipLayout.swift */; };
@@ -32,6 +33,7 @@
 		6516951BB68B21513FE82E73 /* Klondike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Klondike.swift; sourceTree = "<group>"; };
 		7D67F7911E127A089B8FC962 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		91346649DA5363C64A6A7B32 /* Solitaire.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Solitaire.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9430164B3053780F6FE515B2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		B905682ABE27F0C377347274 /* CardBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBack.swift; sourceTree = "<group>"; };
 		BEBC8E45D966A990D21AE92B /* CourtPortrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourtPortrait.swift; sourceTree = "<group>"; };
 		C568BF05C800FC5ACC314BD2 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = AppIcon.icon; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 			children = (
 				C568BF05C800FC5ACC314BD2 /* AppIcon.icon */,
 				CF80EC7B191F35D760DE535E /* Assets.xcassets */,
+				9430164B3053780F6FE515B2 /* PrivacyInfo.xcprivacy */,
 				1025A362D1D3FC2348642BE7 /* SolitaireApp.swift */,
 				C3AFE7A3EF2EEA76A148E81C /* Model */,
 				72F6F73CBB66EF014A33ABE0 /* Views */,
@@ -165,6 +168,7 @@
 			files = (
 				FAA8E7136AC4D02BF1130385 /* AppIcon.icon in Resources */,
 				F1983517E85E41E5F2A1C41B /* Assets.xcassets in Resources */,
+				7CA7C06C6465E5024F0A9ED3 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,7 +207,9 @@
 				DEVELOPMENT_TEAM = 4S8R294RFW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Solitaire;
+				INFOPLIST_KEY_CFBundleDisplayName = MobiSolitaire;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.card-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -252,7 +258,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -317,7 +323,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -351,7 +357,9 @@
 				DEVELOPMENT_TEAM = 4S8R294RFW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Solitaire;
+				INFOPLIST_KEY_CFBundleDisplayName = MobiSolitaire;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.card-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
