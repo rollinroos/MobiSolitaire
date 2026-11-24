@@ -68,11 +68,11 @@ The app uses no encryption (already declared in the build).
 
 ## Privacy policy text (to publish at your own web address)
 MobiSolitaire Privacy Policy
-Effective date: [date]
+Effective date: November 24, 2026
 
 MobiSolitaire does not collect, transmit or share personal information. Your current game and settings are stored on your device and are removed when you delete the app. If your device backups are turned on, this data may be included in them under your agreement with Apple. The app contains no advertising, analytics or tracking, and it makes no network connections.
 
-Questions? Contact MobiMeeds Corporation at [support email].
+Questions? Contact MobiMeeds Corporation at mobimeeds@icloud.com.
 
 ## Still needed from you
 - Support web address
